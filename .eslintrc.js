@@ -58,16 +58,17 @@ const commonRules = {
   '@typescript-eslint/array-type': ['warn', {default: 'array', readonly: 'array'}],
 }
 
-const restrictedBem = [
-  {
-    name: '@bem-react/classname',
-    message: 'Import from utils/bem instead',
-  },
-]
 const restrictedImportsRule = {
   'no-restricted-imports': ['error', {
     paths: [
-      ...restrictedBem,
+      {
+        name: '@bem-react/classname',
+        message: 'Import from utils/bem instead',
+      },
+      {
+        name: 'react-router-dom',
+        message: 'Import from utils/router instead',
+      }
     ],
   }],
 }

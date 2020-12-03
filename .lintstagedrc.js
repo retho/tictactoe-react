@@ -1,4 +1,4 @@
 // https://github.com/okonet/lint-staged
 module.exports = {
-  'src/**/*.{ts,tsx}': ['eslint --max-warnings=0', 'prettier --write', 'git add']
+  'src/**/*.{ts,tsx}': ['prettier --write', 'eslint --max-warnings=0', 'git add']
 }
