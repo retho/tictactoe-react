@@ -1,6 +1,4 @@
-import App from 'components/organisms/App';
 import React from 'react';
-import {app} from './routes';
 import {
   Empty,
   Route,
@@ -8,6 +6,8 @@ import {
   RouteWithRender,
   withRender as withRenderOrigin,
 } from 'utils/router/core';
+import {app} from './routes';
+import AppPage from 'components/pages/AppPage';
 
 export type AppRouteRenderContext = null;
 const withRender = <
@@ -19,4 +19,4 @@ const withRender = <
   render: RouteRender<AppRouteRenderContext, P, Q>
 ): RouteWithRender<S, AppRouteRenderContext, P, Q> => withRenderOrigin(route, render);
 
-export const appRender = withRender(app, () => <App />);
+export const appRender = withRender(app, () => <AppPage />);
