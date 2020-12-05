@@ -14,3 +14,5 @@ const createRoute = <P extends string | Empty = Empty, Q extends string | Empty 
 ): AppRoute<P, Q> => createRouteOrigin(pattern, {});
 
 export const app = createRoute('/app');
+
+export const hotseat = createRoute('/hotseat');

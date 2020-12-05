@@ -1,0 +1,36 @@
+$cell_size: 80px;
+
+.HotseatPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  &__winner {
+    margin: 24px 0;
+    color: #549c64;
+  }
+
+  &__cells {
+    display: flex;
+    flex-wrap: wrap;
+    width: $cell_size * 3;
+  }
+
+  &__cell {
+    width: $cell_size;
+    height: $cell_size;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &--border {
+      &_t, &_tl {
+        border-top: 1px solid #EAEAEA;
+      }
+      &_l, &_tl {
+        border-left: 1px solid #EAEAEA;
+      }
+    }
+  }
+}
