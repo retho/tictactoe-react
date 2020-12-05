@@ -10,7 +10,7 @@ type Initializer = (blockName: string) => ClassNameFormatter;
 const existingBlocks: Record<string, boolean> = {};
 const rawInitializer = withNaming({n: '', e: '__', m: '--', v: '_'});
 const bem: Initializer =
-  process.env.NODE_ENV !== 'development'
+  process.env.NODE_ENV === 'production'
     ? rawInitializer
     : blockName => {
         if (existingBlocks[blockName]) panic(`block with name '${blockName}' already exists`);

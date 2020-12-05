@@ -60,5 +60,10 @@
     "lint-staged": "^10.5.2",
     "node-sass": "^4.0.0",
     "prettier": "^2.2.1"
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "/node_modules/(?!lodash-es).+\\.js$"
+    ]
   }
 }
