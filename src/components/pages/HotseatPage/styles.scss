@@ -9,6 +9,8 @@ $cell_size: 80px;
   &__winner {
     margin: 24px 0;
     color: #549c64;
+    font-weight: 600;
+    letter-spacing: 0.15em;
   }
 
   &__cells {
@@ -23,6 +25,7 @@ $cell_size: 80px;
     display: flex;
     justify-content: center;
     align-items: center;
+    font-weight: 600;
 
     &--border {
       &_t, &_tl {
