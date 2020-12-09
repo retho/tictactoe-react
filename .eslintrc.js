@@ -68,7 +68,15 @@ const restrictedImportsRule = {
       {
         name: 'react-router-dom',
         message: 'Import from utils/router instead',
-      }
+      },
+      {
+        name: 'react-redux',
+        message: 'Import from utils/redux instead',
+      },
+      {
+        name: '@reduxjs/toolkit',
+        message: 'Import from utils/redux instead',
+      },
     ],
   }],
 }
