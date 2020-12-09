@@ -1,10 +1,10 @@
-import { createSliceName, createSlice } from 'utils/redux';
+import {createSliceName, createSlice} from 'utils/redux';
 
 const sliceName = createSliceName('app');
 
 type State = {
   crashed: boolean;
-}
+};
 const defaultState: State = {
   crashed: false,
 };
@@ -17,4 +17,4 @@ const slice = createSlice({
 });
 
 export const {reducer} = slice;
-export const { reset } = slice.actions;
+export const {reset} = slice.actions;

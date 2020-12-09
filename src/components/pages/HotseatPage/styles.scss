@@ -5,12 +5,17 @@ $cell_size: 80px;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  user-select: none;
 
-  &__winner {
+  &__status {
     margin: 24px 0;
     color: #549c64;
     font-weight: 600;
     letter-spacing: 0.15em;
+
+    &--active {
+      cursor: pointer;
+    }
   }
 
   &__cells {
@@ -34,6 +39,10 @@ $cell_size: 80px;
       &_l, &_tl {
         border-left: 1px solid #EAEAEA;
       }
+    }
+
+    &--highlighted {
+      color: #ff9500;
     }
   }
 }
