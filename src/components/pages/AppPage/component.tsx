@@ -1,9 +1,9 @@
 import React, {FC} from 'react';
-import bem from 'utils/bem';
+import {bem} from 'utils/bem';
 import logo from './assets/logo.svg';
 import './styles.scss';
 
-const root = bem('App');
+const root = bem(module.id, 'App');
 const App: FC = () => {
   return (
     <div className={root()}>

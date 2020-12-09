@@ -5,16 +5,16 @@ import {panic} from './common';
 export const cn = (...args: (boolean | null | undefined | string)[]): string =>
   args.filter(x => x).join(' ');
 
-type Initializer = (blockName: string) => ClassNameFormatter;
+type Initializer = (moduleId: string, blockName: string) => ClassNameFormatter;
 
-const existingBlocks: Record<string, boolean> = {};
+const existingBlocks: Record<string, string> = {};
 const rawInitializer = withNaming({n: '', e: '__', m: '--', v: '_'});
-const bem: Initializer =
+export const bem: Initializer =
   process.env.NODE_ENV === 'production'
-    ? rawInitializer
-    : blockName => {
-        if (existingBlocks[blockName]) panic(`block with name '${blockName}' already exists`);
-        existingBlocks[blockName] = true;
+    ? (_, blockName) => rawInitializer(blockName)
+    : (moduleId, blockName) => {
+        const otherModuleId = existingBlocks[blockName];
+        if (otherModuleId && otherModuleId !== moduleId) panic(`bem-block with name '${blockName}' already exists: ${moduleId} ${otherModuleId}`);
+        existingBlocks[blockName] = moduleId;
         return rawInitializer(blockName);
       };
-export default bem;

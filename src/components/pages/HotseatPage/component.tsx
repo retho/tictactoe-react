@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {range} from 'lodash-es';
-import bem from 'utils/bem';
+import {bem} from 'utils/bem';
 import './styles.scss';
 
 type Cell = null | 'x' | 'o';
@@ -9,7 +9,7 @@ const cells: Cell[] = range(0, 9).map(() => {
   return r < 0.33 ? 'x' : r < 0.66 ? 'o' : null;
 });
 
-const root = bem('HotseatPage');
+const root = bem(module.id, 'HotseatPage');
 const HotseatPage: FC = () => {
   return (
     <div className={root()}>
