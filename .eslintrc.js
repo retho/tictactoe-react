@@ -77,6 +77,10 @@ const restrictedImportsRule = {
         name: '@reduxjs/toolkit',
         message: 'Import from utils/redux instead',
       },
+      {
+        name: 'react-toastify',
+        message: 'Import from utils/toastify instead',
+      },
     ],
   }],
 }
