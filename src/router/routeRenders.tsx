@@ -6,7 +6,6 @@ import {
   RouteWithRender,
   withRender as withRenderOrigin,
 } from 'utils/router/core';
-import AppPage from 'components/pages/AppPage';
 import HotseatPage from 'components/pages/HotseatPage';
 import * as routes from './routes';
 
@@ -19,7 +18,5 @@ const withRender = <
   route: Route<S, P, Q>,
   render: RouteRender<AppRouteRenderContext, P, Q>
 ): RouteWithRender<S, AppRouteRenderContext, P, Q> => withRenderOrigin(route, render);
-
-export const appRender = withRender(routes.app, () => <AppPage />);
 
 export const hotseatRender = withRender(routes.hotseat, () => <HotseatPage />);
