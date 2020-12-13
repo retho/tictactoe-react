@@ -32,7 +32,7 @@ type Method =
 export type ReqOptions = {
   method?: Method;
   params?: Record<string, string | number | boolean | readonly string[] | null | undefined>;
-  data?: unknown;
+  body?: unknown;
 };
 const req = <D>(
   path: string,
@@ -40,15 +40,15 @@ const req = <D>(
   res2data: (res: Response) => Promise<D>,
   init?: RequestInit
 ): RequestParams<D> => {
-  const {method = 'get', params, data} = opts || {};
+  const {method = 'get', params, body} = opts || {};
   return {
     res2data,
     path: path + (isEmpty(params) ? '' : '?' + stringifyQuery(params || {})),
-    config: merge({}, configurationDefault, init, {method}, data && {body: JSON.stringify(data)}),
+    config: merge({}, configurationDefault, init, {method}, body && {body: JSON.stringify(body)}),
   };
 };
 
-export const reqJson = <D>(path: string, opts: ReqOptions): RequestParams<D> =>
-  req(path, opts, res => res.json());
-export const blobReq = (path: string, opts: ReqOptions): RequestParams<Blob> =>
-  req(path, opts, res => res.blob());
+export const reqJson = <D>(path: string, opts?: ReqOptions): RequestParams<D> =>
+  req(path, opts || {}, res => res.json());
+export const reqBlob = (path: string, opts?: ReqOptions): RequestParams<Blob> =>
+  req(path, opts || {}, res => res.blob());

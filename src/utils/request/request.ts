@@ -1,3 +1,8 @@
+import {useMemo} from 'react';
+import {useStore} from 'utils/redux';
+import {AppStore} from 'store';
+import {logoutForce} from 'store/slices/auth';
+
 type ReplyErrorApi = {
   kind: 'api';
   status: number;
@@ -20,9 +25,20 @@ export type RequestParams<D> = {
   path: string;
   config?: RequestInit;
 };
-export const request = <D>(params: RequestParams<D>): Promise<Reply<D>> => {
+export type Requester = <D>(params: RequestParams<D>) => Promise<Reply<D>>;
+export const genRequest = (store: AppStore): Requester => <D>(
+  params: RequestParams<D>
+): Promise<Reply<D>> => {
   const {path, res2data, config} = params;
-  return fetch(path, config)
+  const token = store.getState().auth.token;
+  return fetch(path, {
+    ...config,
+    headers: {
+      ...config?.headers,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      Authorization: token ? `Custom ${token}` : '',
+    },
+  })
     .then(
       async (res): Promise<Reply<D>> => {
         if (res.ok) {
@@ -35,6 +51,7 @@ export const request = <D>(params: RequestParams<D>): Promise<Reply<D>> => {
           };
         }
         if (res.status === 401) {
+          store.dispatch(logoutForce());
           return {kind: 'unauthorized'};
         }
         const data = await res
@@ -57,4 +74,10 @@ export const request = <D>(params: RequestParams<D>): Promise<Reply<D>> => {
         };
       }
     );
+};
+
+export const useRequest = (): Requester => {
+  const store = useStore();
+  const request = useMemo(() => genRequest(store), []);
+  return request;
 };

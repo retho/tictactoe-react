@@ -1,13 +1,13 @@
 // eslint-disable-next-line no-restricted-imports
-import { useSelector as useSelectorOrigin } from 'react-redux';
-import { RootState } from 'store';
+import {useSelector as useSelectorOrigin} from 'react-redux';
+import {RootState} from 'store';
 
 // eslint-disable-next-line no-restricted-imports
-export {useDispatch} from 'react-redux';
+export {useDispatch, useStore} from 'react-redux';
 // eslint-disable-next-line no-restricted-imports
-export { createSlice, createAction, combineReducers } from '@reduxjs/toolkit';
+export {createSlice, createAction, combineReducers} from '@reduxjs/toolkit';
 // eslint-disable-next-line no-restricted-imports
-export type { PayloadAction } from '@reduxjs/toolkit';
+export type {PayloadAction} from '@reduxjs/toolkit';
 
 const slicenameCreator = () => {
   if (process.env.NODE_ENV === 'development') {

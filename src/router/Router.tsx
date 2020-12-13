@@ -4,6 +4,8 @@ import {AppRouteRenderContext} from './routeRenders';
 import {matchRoute, useLocation} from 'utils/router';
 import NotFoundPage from 'components/pages/NotFoundPage';
 import * as routes from './routes';
+import {useSelector} from 'utils/redux';
+import AuthPage from 'components/pages/AuthPage';
 
 if (process.env.NODE_ENV !== 'production') {
   const allRoutesWithRenders = Object.values(routesWithRenders).map(x => x.pattern);
@@ -28,7 +30,9 @@ const renderCurrentRoute = (context: AppRouteRenderContext, pathname: string, se
 
 const Router: FC = () => {
   const location = useLocation();
-  return <>{renderCurrentRoute(null, location.pathname, location.search)}</>;
+  const token = useSelector(state => state.auth.token);
+  if (!token) return <AuthPage />;
+  return renderCurrentRoute(null, location.pathname, location.search);
 };
 
 export default Router;
