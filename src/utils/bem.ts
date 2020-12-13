@@ -1,6 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
 import {withNaming, ClassNameFormatter} from '@bem-react/classname';
-import {panic} from './common';
 
 export const cn = (...args: (boolean | null | undefined | string)[]): string =>
   args.filter(x => x).join(' ');
@@ -14,7 +13,10 @@ export const bem: Initializer =
     ? (_, blockName) => rawInitializer(blockName)
     : (moduleId, blockName) => {
         const otherModuleId = existingBlocks[blockName];
-        if (otherModuleId && otherModuleId !== moduleId) panic(`bem-block with name '${blockName}' already exists: ${moduleId} ${otherModuleId}`);
+        if (otherModuleId && otherModuleId !== moduleId)
+          throw new Error(
+            `bem-block with name '${blockName}' already exists: ${moduleId} ${otherModuleId}`
+          );
         existingBlocks[blockName] = moduleId;
         return rawInitializer(blockName);
       };
