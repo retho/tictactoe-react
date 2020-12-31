@@ -3,41 +3,36 @@ export type Empty = typeof empty;
 
 export type Query<Q extends string | Empty> = Record<Q, null | string[]>;
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 export type Route<
-  S extends Record<string, unknown>,
-  P extends string | Empty = Empty,
-  Q extends string | Empty = Empty
-> = S & {
+  S extends unknown,
+  C extends unknown,
+  P extends string | Empty,
+  Q extends string | Empty
+> = {
   pattern: string;
+  render: RouteRender<C, P, Q>;
+  settings: S;
 };
-/* eslint-enable @typescript-eslint/no-unused-vars */
-export type RouteRender<
-  C extends unknown,
-  P extends string | Empty = Empty,
-  Q extends string | Empty = Empty
-> = (params: Record<P, string>, query: Query<Q>, context: C) => JSX.Element;
-export type RouteWithRender<
-  S extends Record<string, unknown>,
-  C extends unknown,
-  P extends string | Empty = Empty,
-  Q extends string | Empty = Empty
-> = Route<S, P, Q> & {render: RouteRender<C, P, Q>};
+export type RouteRender<C extends unknown, P extends string | Empty, Q extends string | Empty> = (
+  params: Record<P, string>,
+  query: Query<Q>,
+  context: C
+) => JSX.Element;
 
+export const createRouteRender = <
+  C extends unknown,
+  P extends string | Empty = Empty,
+  Q extends string | Empty = Empty
+>(
+  render: RouteRender<C, P, Q>
+): RouteRender<C, P, Q> => render;
 export const createRoute = <
-  S extends Record<string, unknown>,
+  S extends unknown,
+  C extends unknown,
   P extends string | Empty = Empty,
   Q extends string | Empty = Empty
 >(
   pattern: string,
+  render: RouteRender<C, P, Q>,
   settings: S
-): Route<S, P, Q> => ({...settings, pattern});
-export const withRender = <
-  S extends Record<string, unknown>,
-  C extends unknown,
-  P extends string | Empty = Empty,
-  Q extends string | Empty = Empty
->(
-  route: Route<S, P, Q>,
-  render: RouteRender<C, P, Q>
-): RouteWithRender<S, C, P, Q> => ({...route, render});
+): Route<S, C, P, Q> => ({pattern, render, settings});
