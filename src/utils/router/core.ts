@@ -12,9 +12,9 @@ export const emptyQueryableInstance: Queryable<Empty, null> = {
   toQuery: () => ({} as Query<Empty>),
 };
 
-export type Route<S extends unknown, P extends string | Empty, Q extends string | Empty, QP> = {
+export type Route<S extends unknown, P extends string | Empty, QP> = {
   pattern: string;
-  queryableInstance: Queryable<Q, QP>;
+  queryableInstance: Queryable<string | Empty, QP>;
   render: RouteRender<P, QP>;
   settings: S;
 };
@@ -30,8 +30,8 @@ export const createRouteRender = <Q extends string | Empty, QP>(
   render: RouteRender<P, QP>
 ): [Queryable<Q, QP>, RouteRender<P, QP>] => [queryableInstance, render];
 
-export const createRoute = <S, P extends string | Empty, Q extends string | Empty, QP>(
+export const createRoute = <S, P extends string | Empty, QP>(
   pattern: string,
-  [queryableInstance, render]: [Queryable<Q, QP>, RouteRender<P, QP>],
+  [queryableInstance, render]: [Queryable<string | Empty, QP>, RouteRender<P, QP>],
   settings: S
-): Route<S, P, Q, QP> => ({pattern, queryableInstance, render, settings});
+): Route<S, P, QP> => ({pattern, queryableInstance, render, settings});

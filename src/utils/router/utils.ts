@@ -17,10 +17,10 @@ const arrayFormat = 'bracket' as const;
 export {Redirect};
 
 export const stringifyQuery = qsStringifyQuery;
-export const stringifyRoute = <P extends string | Empty, QD extends unknown>(
-  route: Route<unknown, P, string | Empty, QD>,
+export const stringifyRoute = <P extends string | Empty, QP extends unknown>(
+  route: Route<unknown, P, QP>,
   params: Record<P, string>,
-  queryPayload: QD
+  queryPayload: QP
 ): string => {
   const pattern = new UrlPattern(route.pattern);
   const query = route.queryableInstance.toQuery(queryPayload);
@@ -37,11 +37,11 @@ export const stringifyRoute = <P extends string | Empty, QD extends unknown>(
   );
 };
 
-export const matchRoute = <Q extends string | Empty, P extends string | Empty>(
-  route: Route<unknown, P, Q, unknown>,
+export const matchRoute = <P extends string | Empty, QP>(
+  route: Route<unknown, P, QP>,
   pathname: string,
-  search: string
-): null | [Record<P, string>, Query<Q>] => {
+  query: Query<string | Empty>
+): null | [Record<P, string>, QP] => {
   const matched: {params: Record<P, string>} | null = matchPath(pathname, {
     path: route.pattern,
     exact: true,
@@ -50,15 +50,22 @@ export const matchRoute = <Q extends string | Empty, P extends string | Empty>(
   if (!matched) return null;
 
   const params = mapValues(matched.params, decodeURIComponent);
-  const query = (mapValues(
+  const queryPayload = route.queryableInstance.fromQuery(query);
+
+  return [params, queryPayload];
+};
+
+export const parseQuery = (search: string): Query<string | Empty> => {
+  const query = mapValues(
     qsParse(search, {
       parseBooleans: false,
       parseNumbers: false,
       arrayFormat,
     }),
     x => (Array.isArray(x) ? x : x ? [x] : []).map(decodeURIComponent)
-  ) as unknown) as Query<Q>;
-  return [params, query];
+  );
+
+  return query as Query<string | Empty>;
 };
 
 export const useHistory = (): History<unknown> => {

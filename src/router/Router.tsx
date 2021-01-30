@@ -1,32 +1,39 @@
 import React, {FC} from 'react';
-import {matchRoute, useLocation} from 'utils/router';
+import {matchRoute, parseQuery, useLocation} from 'utils/router';
 import NotFoundPage from 'components/pages/NotFoundPage';
 import * as routes from './routes';
+import {AppRoute} from './routes';
 import {useSelector} from 'utils/redux';
 import AuthPage from 'components/pages/AuthPage';
-import {Empty, Route} from 'utils/router/core';
+import {Empty, Query} from 'utils/router/core';
 
-const renderCurrentRoute = (pathname: string, search: string) => {
+const findCurrentRoute = (pathname: string, query: Query<string | Empty>) => {
   for (const r of Object.values(routes)) {
-    const matched = matchRoute(
-      r as Route<unknown, string | Empty, string | Empty, unknown>,
-      pathname,
-      search
-    );
+    const route = r as AppRoute<string | Empty, unknown>;
+    const matched = matchRoute(route, pathname, query);
     if (matched) {
-      const [params, query] = matched;
-      const queryPayload = r.queryableInstance.fromQuery(query);
-      return r.render(params, queryPayload);
+      const [params, queryPayload] = matched;
+      return route.render(params, queryPayload);
     }
   }
-  return <NotFoundPage />;
+  return null;
+};
+
+const useCurrentRoute = () => {
+  const location = useLocation();
+
+  const token = useSelector(state => state.auth.token);
+  if (!token) return <AuthPage />;
+
+  const query = parseQuery(location.search);
+  const currentRoute = findCurrentRoute(location.pathname, query);
+
+  return currentRoute || <NotFoundPage />;
 };
 
 const Router: FC = () => {
-  const location = useLocation();
-  const token = useSelector(state => state.auth.token);
-  if (!token) return <AuthPage />;
-  return renderCurrentRoute(location.pathname, location.search);
+  const jsx = useCurrentRoute();
+  return jsx;
 };
 
 export default Router;
