@@ -3,36 +3,46 @@ export type Empty = typeof empty;
 
 export type Query<Q extends string | Empty> = Record<Q, null | string[]>;
 
+export type Queryable<Q extends string | Empty, D extends unknown> = {
+  toQuery: (payload: D) => Query<Q>;
+  fromQuery: (query: Query<Q>) => D;
+};
+
 export type Route<
   S extends unknown,
   C extends unknown,
   P extends string | Empty,
-  Q extends string | Empty
+  Q extends string | Empty,
+  QD extends unknown
 > = {
   pattern: string;
-  render: RouteRender<C, P, Q>;
+  queryableInstance: Queryable<Q, QD>;
+  render: RouteRender<C, P, QD>;
   settings: S;
 };
-export type RouteRender<C extends unknown, P extends string | Empty, Q extends string | Empty> = (
+export type RouteRender<C extends unknown, P extends string | Empty, QD extends unknown> = (
   params: Record<P, string>,
-  query: Query<Q>,
-  context: C
+  queryPayload: QD,
+  renderContext: C
 ) => JSX.Element;
 
 export const createRouteRender = <
   C extends unknown,
-  P extends string | Empty = Empty,
-  Q extends string | Empty = Empty
+  Q extends string | Empty,
+  QD extends unknown,
+  P extends string | Empty = Empty
 >(
-  render: RouteRender<C, P, Q>
-): RouteRender<C, P, Q> => render;
+  queryableInstance: Queryable<Q, QD>,
+  render: RouteRender<C, P, QD>
+): [Queryable<Q, QD>, RouteRender<C, P, QD>] => [queryableInstance, render];
 export const createRoute = <
   S extends unknown,
   C extends unknown,
-  P extends string | Empty = Empty,
-  Q extends string | Empty = Empty
+  Q extends string | Empty,
+  QD extends unknown,
+  P extends string | Empty = Empty
 >(
   pattern: string,
-  render: RouteRender<C, P, Q>,
+  [queryableInstance, render]: [Queryable<Q, QD>, RouteRender<C, P, QD>],
   settings: S
-): Route<S, C, P, Q> => ({pattern, render, settings});
+): Route<S, C, P, Q, QD> => ({pattern, queryableInstance, render, settings});

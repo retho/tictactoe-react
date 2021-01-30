@@ -65,7 +65,7 @@ const commonRules = {
   'no-unreachable': 'warn',
   'default-case': 'warn',
   'default-case-last': 'warn',
-  'eqeqeq': 'error',
+  'eqeqeq': ['error', 'always', {null: 'ignore'}],
   '@typescript-eslint/array-type': ['warn', {default: 'array', readonly: 'array'}],
 }
 

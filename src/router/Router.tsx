@@ -5,13 +5,19 @@ import NotFoundPage from 'components/pages/NotFoundPage';
 import * as routes from './routes';
 import {useSelector} from 'utils/redux';
 import AuthPage from 'components/pages/AuthPage';
+import {Empty, Route} from 'utils/router/core';
 
 const renderCurrentRoute = (context: AppRouteRenderContext, pathname: string, search: string) => {
   for (const r of Object.values(routes)) {
-    const matched = matchRoute(r, pathname, search);
+    const matched = matchRoute(
+      r as Route<unknown, AppRouteRenderContext, string | Empty, string | Empty, unknown>,
+      pathname,
+      search
+    );
     if (matched) {
       const [params, query] = matched;
-      return r.render(params, query, context);
+      const queryPayload = r.queryableInstance.fromQuery(query);
+      return r.render(params, queryPayload, context);
     }
   }
   return <NotFoundPage />;

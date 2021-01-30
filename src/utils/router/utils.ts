@@ -17,12 +17,13 @@ const arrayFormat = 'bracket' as const;
 export {Redirect};
 
 export const stringifyQuery = qsStringifyQuery;
-export const stringifyRoute = <P extends string | Empty, Q extends string | Empty>(
-  route: Route<unknown, unknown, P, Q>,
+export const stringifyRoute = <P extends string | Empty, QD extends unknown>(
+  route: Route<unknown, unknown, P, string | Empty, QD>,
   params: Record<P, string>,
-  query: Query<Q>
+  queryPayload: QD
 ): string => {
   const pattern = new UrlPattern(route.pattern);
+  const query = route.queryableInstance.toQuery(queryPayload);
   return (
     pattern.stringify(params && mapValues(params, encodeURIComponent)) +
     (isEmpty(query)
@@ -36,8 +37,8 @@ export const stringifyRoute = <P extends string | Empty, Q extends string | Empt
   );
 };
 
-export const matchRoute = <C extends unknown, P extends string | Empty, Q extends string | Empty>(
-  route: Route<unknown, C, P, Q>,
+export const matchRoute = <C extends unknown, Q extends string | Empty, P extends string | Empty>(
+  route: Route<unknown, C, P, Q, unknown>,
   pathname: string,
   search: string
 ): null | [Record<P, string>, Query<Q>] => {
