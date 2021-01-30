@@ -7,42 +7,31 @@ export type Queryable<Q extends string | Empty, D extends unknown> = {
   toQuery: (payload: D) => Query<Q>;
   fromQuery: (query: Query<Q>) => D;
 };
+export const emptyQueryableInstance: Queryable<Empty, null> = {
+  fromQuery: () => null,
+  toQuery: () => ({} as Query<Empty>),
+};
 
-export type Route<
-  S extends unknown,
-  C extends unknown,
-  P extends string | Empty,
-  Q extends string | Empty,
-  QD extends unknown
-> = {
+export type Route<S extends unknown, P extends string | Empty, Q extends string | Empty, QP> = {
   pattern: string;
-  queryableInstance: Queryable<Q, QD>;
-  render: RouteRender<C, P, QD>;
+  queryableInstance: Queryable<Q, QP>;
+  render: RouteRender<P, QP>;
   settings: S;
 };
-export type RouteRender<C extends unknown, P extends string | Empty, QD extends unknown> = (
+
+export type RouteRender<P extends string | Empty, QP> = (
   params: Record<P, string>,
-  queryPayload: QD,
-  renderContext: C
+  queryPayload: QP
 ) => JSX.Element;
 
-export const createRouteRender = <
-  C extends unknown,
-  Q extends string | Empty,
-  QD extends unknown,
-  P extends string | Empty = Empty
->(
-  queryableInstance: Queryable<Q, QD>,
-  render: RouteRender<C, P, QD>
-): [Queryable<Q, QD>, RouteRender<C, P, QD>] => [queryableInstance, render];
-export const createRoute = <
-  S extends unknown,
-  C extends unknown,
-  Q extends string | Empty,
-  QD extends unknown,
-  P extends string | Empty = Empty
->(
+export const createRouteRender = <Q extends string | Empty, QP>(
+  queryableInstance: Queryable<Q, QP>
+) => <P extends string | Empty = Empty>(
+  render: RouteRender<P, QP>
+): [Queryable<Q, QP>, RouteRender<P, QP>] => [queryableInstance, render];
+
+export const createRoute = <S, P extends string | Empty, Q extends string | Empty, QP>(
   pattern: string,
-  [queryableInstance, render]: [Queryable<Q, QD>, RouteRender<C, P, QD>],
+  [queryableInstance, render]: [Queryable<Q, QP>, RouteRender<P, QP>],
   settings: S
-): Route<S, C, P, Q, QD> => ({pattern, queryableInstance, render, settings});
+): Route<S, P, Q, QP> => ({pattern, queryableInstance, render, settings});

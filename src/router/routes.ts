@@ -5,20 +5,19 @@ import {
   RouteRender,
   Queryable,
 } from 'utils/router/core';
-import {AppRouteRenderContext} from './routeRenders';
 import {hotseatRender} from './routeRenders';
 
 export type AppRouteSettings = null;
 export type AppRoute<
   P extends string | Empty,
   Q extends string | Empty,
-  QD extends unknown
-> = Route<AppRouteSettings, AppRouteRenderContext, P, Q, QD>;
+  QP extends unknown
+> = Route<AppRouteSettings, P, Q, QP>;
 
-const createRoute = <P extends string | Empty, Q extends string | Empty, QD extends unknown>(
+const createRoute = <P extends string | Empty, Q extends string | Empty, QP extends unknown>(
   pattern: string,
-  routeRender: [Queryable<Q, QD>, RouteRender<AppRouteRenderContext, P, QD>],
+  routeRender: [Queryable<Q, QP>, RouteRender<P, QP>],
   settings: AppRouteSettings = null
-): AppRoute<P, Q, QD> => createRouteOrigin(pattern, routeRender, settings);
+): AppRoute<P, Q, QP> => createRouteOrigin(pattern, routeRender, settings);
 
 export const hotseat = createRoute('/hotseat', hotseatRender);

@@ -18,7 +18,7 @@ export {Redirect};
 
 export const stringifyQuery = qsStringifyQuery;
 export const stringifyRoute = <P extends string | Empty, QD extends unknown>(
-  route: Route<unknown, unknown, P, string | Empty, QD>,
+  route: Route<unknown, P, string | Empty, QD>,
   params: Record<P, string>,
   queryPayload: QD
 ): string => {
@@ -37,8 +37,8 @@ export const stringifyRoute = <P extends string | Empty, QD extends unknown>(
   );
 };
 
-export const matchRoute = <C extends unknown, Q extends string | Empty, P extends string | Empty>(
-  route: Route<unknown, C, P, Q, unknown>,
+export const matchRoute = <Q extends string | Empty, P extends string | Empty>(
+  route: Route<unknown, P, Q, unknown>,
   pathname: string,
   search: string
 ): null | [Record<P, string>, Query<Q>] => {
