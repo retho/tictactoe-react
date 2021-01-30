@@ -18,17 +18,28 @@ const namingRules = {
       trailingUnderscore: 'allow',
     },
     {
-      selector: "function",
-      format: ["PascalCase", "camelCase"]
+      selector: 'function',
+      format: ['PascalCase', 'camelCase']
     },
     {
-      selector: "variable",
-      types: ["function"],
-      format: ["PascalCase", "camelCase"]
+      selector: 'variable',
+      types: ['function'],
+      format: ['PascalCase', 'camelCase']
     },
     {
       selector: 'typeLike',
       format: ['PascalCase'],
+    },
+    // {
+    //   selector: 'memberLike',
+    //   modifiers: ['requiresQuotes'],
+    //   format: null,
+    // },
+    {
+      selector: 'variable',
+      types: ['boolean'],
+      format: ['PascalCase'],
+      prefix: ['is', 'should', 'has', 'can', 'did', 'will'],
     },
   ]
 }
